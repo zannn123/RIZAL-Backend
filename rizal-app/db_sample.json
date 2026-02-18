@@ -1,0 +1,80 @@
+{
+  "users": [
+    {
+      "id": "ADMIN-01",
+      "name": "System Admin",
+      "email": "admin@rizal.edu",
+      "password": "hashed_password_here",
+      "rememberMe": true,
+      "role": "admin",
+      "college": "Admin Office",
+      "status": "Active",
+      "createdAt": "2024-01-01T08:00:00Z"
+    },
+    {
+      "id": "SG-01",
+      "name": "SG President",
+      "email": "sg_president@rizal.edu",
+      "password": "hashed_password_here",
+      "rememberMe": true,
+      "role": "sg",
+      "college": "Student Government",
+      "status": "Active",
+      "createdAt": "2024-01-02T09:00:00Z"
+    },
+    {
+      "id": "2023-0001",
+      "name": "Jose Rizal",
+      "email": "jose.rizal@rizal.edu",
+      "password": "hashed_password_here",
+      "rememberMe": true
+      "role": "student",
+      "studentId": "2023-0001",
+      "college": "College of Engineering",
+      "program": "BS Computer Engineering",
+      "faceScanRegistered": true,
+      "status": "Active",
+      "createdAt": "2024-02-14T10:30:00Z"
+    },
+    {
+      "id": "2023-0002",
+      "name": "Maria Clara",
+      "email": "maria.clara@rizal.edu",
+      "password": "hashed_password_here",
+      "role": "student",
+      "rememberMe": true
+      "studentId": "2023-0002",
+      "college": "College of Arts and Sciences",
+      "program": "BA Psychology",
+      "faceScanRegistered": false,
+      "status": "Pending",
+      "createdAt": "2024-02-15T11:45:00Z"
+    }
+  ],
+  "registrations": [
+    {
+      "registrationId": "REG-001",
+      "studentId": "2023-0002",
+      "status": "pending_approval",
+      "submissionDate": "2024-02-15T11:45:00Z"
+    }
+  ],
+  "metadata": {
+    "colleges": [
+      "College of Engineering",
+      "College of Arts and Sciences",
+      "College of Business",
+      "College of Education"
+    ],
+    "programs": {
+      "College of Engineering": [
+        "BS Computer Engineering",
+        "BS Civil Engineering"
+      ],
+      "College of Arts and Sciences": [
+        "BA Psychology",
+        "BS Biology"
+      ]
+    }
+  }
+}

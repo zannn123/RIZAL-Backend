@@ -2,9 +2,177 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+    html {
+        font-family: 'Poppins', sans-serif;
+    }
+
+    html.dark {
+        color-scheme: dark;
+    }
+
+    body {
+        @apply transition-colors duration-300;
+    }
+}
+
+@layer components {
+
+    /* ===== GLASS CARD ===== */
+    .glass-card {
+        @apply bg-white/80 dark:bg-white/[0.06] backdrop-blur-xl border border-gray-200/50 dark:border-white/[0.08] rounded-2xl shadow-lg shadow-black/[0.04] dark:shadow-black/20;
+    }
+
+    /* ===== GLASS SIDEBAR ===== */
+    .glass-sidebar {
+        @apply bg-white/90 dark:bg-[#0a1230]/90 backdrop-blur-2xl border-r border-gray-200 dark:border-white/[0.06] transition-colors duration-300;
+    }
+
+    /* ===== GLASS TOP BAR ===== */
+    .glass-topbar {
+        @apply bg-white/70 dark:bg-[#0a1230]/70 backdrop-blur-xl border-b border-gray-200/50 dark:border-white/[0.06] transition-colors duration-300;
+    }
+
+    /* ===== STAT CARD ===== */
+    .stat-card {
+        @apply glass-card p-5 flex items-center gap-4 hover:scale-[1.02] transition-all duration-200 cursor-default;
+    }
+
+    .stat-icon {
+        @apply w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-lg;
+    }
+
+    /* ===== DATA TABLE ===== */
+    .data-table {
+        @apply w-full text-left text-sm;
+    }
+
+    .data-table thead {
+        @apply text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-white/[0.08];
+    }
+
+    .data-table th {
+        @apply px-5 py-3.5 font-semibold;
+    }
+
+    .data-table td {
+        @apply px-5 py-4;
+    }
+
+    .data-table tbody tr {
+        @apply border-b border-gray-100 dark:border-white/[0.05] hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors;
+    }
+
+    /* ===== STATUS BADGES ===== */
+    .badge {
+        @apply px-2.5 py-1 rounded-full text-xs font-semibold inline-flex items-center gap-1;
+    }
+
+    .badge-green {
+        @apply bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400;
+    }
+
+    .badge-amber {
+        @apply bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-400;
+    }
+
+    .badge-red {
+        @apply bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400;
+    }
+
+    .badge-blue {
+        @apply bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400;
+    }
+
+    .badge-gray {
+        @apply bg-gray-100 dark:bg-gray-500/20 text-gray-600 dark:text-gray-400;
+    }
+
+    /* ===== FORM INPUT ===== */
+    .form-input {
+        @apply w-full bg-gray-50 dark:bg-white/[0.07] border border-gray-200 dark:border-white/[0.1] rounded-xl py-3 px-4 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-500 dark:focus:border-[#ffc107] focus:ring-2 focus:ring-brand-500/20 dark:focus:ring-[#ffc107]/20 transition-all;
+    }
+
+    .form-label {
+        @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn-primary {
+        @apply px-5 py-2.5 bg-gradient-to-r from-brand-600 dark:from-[#1a237e] to-brand-500 dark:to-[#304ffe] hover:from-brand-500 hover:to-brand-400 text-white font-semibold rounded-xl shadow-lg shadow-brand-500/25 dark:shadow-[#304ffe]/25 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0;
+    }
+
+    .btn-ghost {
+        @apply px-4 py-2.5 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/[0.06] rounded-xl transition-colors font-medium;
+    }
+}
+
 @layer utilities {
     .animate-fadeIn {
         animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    /* ===== GRADIENT BACKGROUND ===== */
+    /* Light mode: soft gradient */
+    .gradient-bg {
+        background: linear-gradient(135deg, #e8eaf6, #c5cae9, #e3f2fd, #e8eaf6);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+    }
+
+    /* Dark mode: deep navy like welcome page */
+    .dark .gradient-bg {
+        background: #050a18;
+    }
+}
+
+/* ===== FLOATING ORBS (dark mode only, matches welcome page) ===== */
+.dark .gradient-bg::before,
+.dark .gradient-bg::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+    animation: floatOrb 20s infinite ease-in-out alternate;
+}
+
+.dark .gradient-bg::before {
+    width: 500px;
+    height: 500px;
+    background: #0a1f44;
+    top: -120px;
+    left: -100px;
+}
+
+.dark .gradient-bg::after {
+    width: 400px;
+    height: 400px;
+    background: #1a237e;
+    bottom: -80px;
+    right: -80px;
+    animation-delay: -7s;
+}
+
+@keyframes floatOrb {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(30px, 50px) scale(1.1);
+    }
+
+    100% {
+        transform: translate(-20px, -30px) scale(0.95);
     }
 }
 
@@ -18,4 +186,42 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+@keyframes gradientShift {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
