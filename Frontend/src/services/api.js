@@ -19,7 +19,8 @@ import * as mockDb from '../mock/db.js';
 // -----------------------------------------------------------
 // 🔧 BASE URL & HELPERS
 // -----------------------------------------------------------
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Points to the live Render backend
+const API_BASE = import.meta.env.VITE_API_URL || 'https://rizal-backend.onrender.com';
 
 /**
  * Shared fetch wrapper that adds auth headers and handles errors.
