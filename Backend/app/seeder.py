@@ -17,7 +17,12 @@ def create_tables():
     from app.models.department import Department
     from app.models.program import Program
     from app.models.event import Event
-    from app.models.associations import *
+    from app.models.associations import (
+        event_department_association,
+        event_program_association,
+        program_department_association,
+        event_ssg_association
+    )
     Base.metadata.create_all(bind=engine)
     print("✅ Database tables created")
 
