@@ -20,7 +20,7 @@ import * as mockDb from '../mock/db.js';
 // 🔧 BASE URL & HELPERS
 // -----------------------------------------------------------
 // Points to the live Render backend
-const API_BASE = import.meta.env.VITE_API_URL || 'https://rizal-backend.onrender.com';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://backend-c65g.onrender.com';
 
 /**
  * Shared fetch wrapper that adds auth headers and handles errors.
@@ -236,6 +236,44 @@ export async function getUsers() {
         console.warn('Backend getUsers failed, falling back to mock:', err.message);
         await delay(300);
         return mockDb.users;
+    }
+}
+
+// -----------------------------------------------------------
+// 👤 USERS — GET /users/{id}
+// -----------------------------------------------------------
+/**
+ * Get user profile by ID.
+ *
+ * Backend: GET /users/me (if currentUser) or /users/{id}
+ *   Response: { id, email, first_name, last_name, is_active, roles, student_profile, ssg_profile, ... }
+ */
+export async function getProfile(userId) {
+    try {
+        const currentUser = getCurrentUser();
+        // If the requested userId matches the current user, use /users/me for convenience
+        // Otherwise try to fetch by ID (requires admin/sg usually, or the user's own ID)
+        const endpoint = (!userId || (currentUser && (currentUser.id === userId || currentUser.studentId === userId)))
+            ? '/users/me/'
+            : `/users/${userId}`;
+
+        const profile = await apiFetch(endpoint);
+        return formatUserFromBackend(profile);
+    } catch (err) {
+        console.warn(`Backend getProfile(${userId}) failed, falling back to mock:`, err.message);
+        await delay(300);
+
+        // Find in mock DB
+        // Check both string matching (for "24-A-00123") and exact ID matching
+        let user = mockDb.users.find(u => u.studentId === userId || String(u.id) === String(userId));
+
+        // If still not found and we are looking for the current user, just use the current user data
+        if (!user && currentUser && (currentUser.id === userId || currentUser.studentId === userId)) {
+            user = currentUser;
+        }
+
+        if (!user) throw new Error('User profile not found.');
+        return user;
     }
 }
 
@@ -643,27 +681,8 @@ export async function getLoginRecords() {
 }
 
 // -----------------------------------------------------------
-// 👤 PROFILE — GET /users/me, PATCH /users/{id}
+// 👤 PROFILE — PATCH /users/{id}
 // -----------------------------------------------------------
-/**
- * Get the current user's profile data.
- *
- * Backend: GET /users/me
- */
-export async function getProfile(userId = null) {
-    try {
-        const profile = await apiFetch('/users/me');
-        return formatUserFromBackend(profile);
-    } catch (err) {
-        console.warn('Backend getProfile failed, falling back to mock:', err.message);
-        await delay(300);
-        const mockUserId = userId || 'ADMIN-01';
-        const user = mockDb.users.find(u => u.id === mockUserId);
-        if (!user) throw new Error('User not found');
-        const { password, ...profileData } = user;
-        return profileData;
-    }
-}
 
 /**
  * Update the current user's profile data.

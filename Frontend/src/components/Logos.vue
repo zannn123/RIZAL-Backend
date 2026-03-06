@@ -1,6 +1,4 @@
 <script setup>
-import { computed } from 'vue';
-
 const props = defineProps({
   isCompact: Boolean
 });
@@ -8,11 +6,10 @@ const props = defineProps({
 
 <template>
   <div 
-    class="header-logos flex gap-[15px] pt-[0.7rem] pb-[0.3rem] transition-all duration-[800ms] z-50 shrink-0"
-    :class="{ 'scale-75 -mb-[0.8rem] origin-left': isCompact }"
+    class="header-logos flex items-center gap-3 pt-[0.5rem] pb-0 transition-all duration-[800ms] z-50 shrink-0 -ml-2"
+    :class="{ 'scale-[0.8] -mb-[0.1rem] origin-left': isCompact }"
   >
-    <img src="@/assets/icon.png" alt="Logo 1" class="logo-icon w-[clamp(40px,8vw,65px)] h-[clamp(40px,8vw,65px)] object-contain bg-transparent" />
-    <img src="@/assets/jrmsu_icon.png" alt="Logo 2" class="logo-icon w-[clamp(40px,8vw,65px)] h-[clamp(40px,8vw,65px)] object-contain bg-transparent" />
+    <img src="@/assets/aura.png" alt="Aura" class="h-[80px] object-contain" />
   </div>
 </template>
 

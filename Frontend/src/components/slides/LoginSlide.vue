@@ -8,7 +8,7 @@ import ErrorModal from '../ErrorModal.vue';
 // 🔴 BACKEND: see src/services/api.js → loginUser(), saveAuth()
 import { loginUser, saveAuth, getCurrentUser, clearAuth } from '../../services/api.js';
 
-const emit = defineEmits(['next', 'create-account']);
+const emit = defineEmits(['next']);
 const router = useRouter();
 
 const email = ref('');
@@ -176,11 +176,7 @@ const validateLogin = async () => {
 
         isLoading.value = false;
 
-        // SKIP FACE SCAN IF UNREGISTERED STUDENT
-        if (authResult.user.role === 'student' && authResult.user.faceScanRegistered === false) {
-             router.push('/student/pending');
-             return; // Stop here, no camera needed
-        }
+
 
         loginStep.value = 'facescan';
         faceScanState.value = 'scanning';
@@ -205,7 +201,7 @@ const onFaceScanSuccess = () => {
         loginStep.value = 'done';
         if (detectedRole.value === 'admin') { router.push('/admin/dashboard'); }
         else if (detectedRole.value === 'sg') { router.push('/sg/approvals'); }
-        else { router.push('/student/pending'); }
+        else { router.push('/student/profile'); }
     }, 1500);
 };
 
@@ -228,7 +224,7 @@ const cancelFaceScan = () => {
     }
 };
 
-const createAccount = () => { router.push('/student/create'); };
+
 
 onMounted(async () => {
     if (window.grecaptcha && window.grecaptcha.render) {
@@ -246,11 +242,7 @@ onMounted(async () => {
         isAutoLogin.value = true;
         detectedRole.value = rememberedUser.role;
 
-        // SKIP FACE SCAN IF UNREGISTERED STUDENT
-        if (rememberedUser.role === 'student' && rememberedUser.faceScanRegistered === false) {
-            router.push('/student/pending');
-            return;
-        }
+
 
         loginStep.value = 'facescan';
         faceScanState.value = 'scanning';
@@ -270,20 +262,20 @@ onBeforeUnmount(() => { stopCamera(); });
     <!-- ===== STEP 1: EMAIL + PASSWORD ===== -->
     <div v-if="loginStep === 'credentials'" class="flex flex-col">
       <h1 class="text-[2rem] sm:text-[2.5rem] leading-[1.1] mb-[1rem] sm:mb-[1.5rem] font-bold">
-        Log <span class="text-[#ffc107]">In.</span>
+        Log <span class="text-[#02046e]">In.</span>
       </h1>
 
       <form @submit.prevent="validateLogin">
         <div class="mb-[0.8rem] sm:mb-[1.2rem]">
-          <label class="block text-[0.8rem] mb-[0.3rem] text-[#ccc]">Email</label>
-          <input v-model="email" type="email" placeholder="admin@rizal.edu"
-            class="w-full p-[0.8rem] sm:p-[1rem] bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)] rounded-[12px] text-white outline-none focus:border-[#ffc107]" />
+          <label class="block text-[0.8rem] mb-[0.3rem] text-[#e0e0e0] font-medium tracking-wide">Email</label>
+          <input v-model="email" type="email" placeholder="admin@aura.edu"
+            class="w-full form-input backdrop-blur-xl bg-white/5 border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] rounded-[12px] text-white p-[1rem] placeholder-white/40 focus:border-white/40 focus:bg-white/10 transition-all duration-300 transparent-autofill" />
         </div>
         <div class="mb-[0.8rem] sm:mb-[1.2rem] relative">
-          <label class="block text-[0.8rem] mb-[0.3rem] text-[#ccc]">Password</label>
+          <label class="block text-[0.8rem] mb-[0.3rem] text-[#e0e0e0] font-medium tracking-wide">Password</label>
           <div class="relative">
             <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="********"
-              class="w-full p-[0.8rem] sm:p-[1rem] pr-12 bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)] rounded-[12px] text-white outline-none focus:border-[#ffc107]" />
+              class="w-full form-input backdrop-blur-xl bg-white/5 border border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.1)] rounded-[12px] text-white p-[1rem] pr-12 placeholder-white/40 focus:border-white/40 focus:bg-white/10 transition-all duration-300 transparent-autofill" />
             <button type="button" @click="showPassword = !showPassword"
               class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors p-1">
               <!-- Eye open -->
@@ -318,10 +310,7 @@ onBeforeUnmount(() => { stopCamera(); });
           class="w-full p-[0.8rem] sm:p-[0.9rem] rounded-[20px] text-[0.9rem] sm:text-[1rem] font-semibold cursor-pointer shadow-[0_4px_15px_rgba(48,79,254,0.4)] z-[200] shrink-0 text-white bg-gradient-to-r from-[#1a237e] to-[#304ffe] disabled:opacity-70 disabled:cursor-not-allowed">
           {{ isLoading ? 'Verifying...' : 'Log In' }}
         </button>
-        <button type="button" @click="createAccount"
-          class="w-full p-[0.8rem] sm:p-[1rem] bg-transparent text-[#b0b0b0] border border-[rgba(255,255,255,0.15)] rounded-[20px] text-[0.9rem] sm:text-[1rem] font-semibold cursor-pointer mt-[0.5rem] sm:mt-[0.6rem] transition-all duration-300 z-[200] hover:bg-[rgba(255,255,255,0.05)] hover:border-[rgba(255,193,7,0.4)] hover:text-[#ffc107]">
-          Create Account
-        </button>
+
       </form>
     </div>
 
@@ -454,6 +443,17 @@ onBeforeUnmount(() => { stopCamera(); });
 }
 .animate-scanLine {
   animation: scanLine 2.5s ease-in-out infinite;
+}
+
+/* Force autofill backgrounds to stay fully transparent matching the glass effect */
+.transparent-autofill:-webkit-autofill,
+.transparent-autofill:-webkit-autofill:hover,
+.transparent-autofill:-webkit-autofill:focus,
+.transparent-autofill:-webkit-autofill:active {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: white !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  caret-color: white;
 }
 </style>
 

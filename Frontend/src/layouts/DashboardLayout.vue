@@ -134,9 +134,9 @@ const isActive = (path) => {
       >
         <!-- Logo -->
         <div class="h-24 flex items-center px-8 shrink-0">
-          <img src="../assets/icon.png" alt="RIZAL" class="w-10 h-10 rounded-xl mr-3 object-cover shadow-md shadow-brand-500/20" />
+          <img src="../assets/aura.png" alt="Aura" class="w-10 h-10 rounded-xl mr-3 object-cover shadow-md shadow-brand-500/20" />
           <span class="text-xl font-bold text-gray-900 dark:text-white tracking-widest">
-            RIZAL <span class="text-brand-500 text-2xl leading-none">.</span>
+            AURA <span class="text-brand-500 text-2xl leading-none">.</span>
           </span>
           <button @click="toggleSidebar" class="ml-auto lg:hidden text-gray-500 hover:text-gray-900 dark:hover:text-white">
             <X class="w-5 h-5" />

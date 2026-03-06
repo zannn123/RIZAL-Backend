@@ -1,11 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import LandingPage from '../views/LandingPage.vue'
 import DashboardLayout from '../layouts/DashboardLayout.vue'
 import { getCurrentUser } from '../services/api.js'
 import * as mockDb from '../mock/db.js'
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(),
     routes: [
         {
             path: '/',
@@ -13,12 +13,7 @@ const router = createRouter({
             component: LandingPage
         },
 
-        // Student Routes (standalone, no dashboard layout)
-        {
-            path: '/student/create',
-            name: 'student-create',
-            component: () => import('../views/student/CreateAccount.vue')
-        },
+
 
         // Student Routes with Dashboard Layout
         {
@@ -49,12 +44,7 @@ const router = createRouter({
                     meta: { requiresFaceScan: true },
                     component: () => import('../views/student/StudentAnnouncements.vue')
                 },
-                {
-                    path: 'pending',
-                    name: 'student-pending',
-                    meta: { pendingOnly: true },
-                    component: () => import('../views/student/QRPending.vue')
-                },
+
             ]
         },
 
@@ -126,40 +116,5 @@ const router = createRouter({
     ]
 })
 
-// -----------------------------------------------------------
-// STUDENT FACE SCAN GUARD
-// -----------------------------------------------------------
-// Controls student dashboard access based on faceScanRegistered status:
-// - faceScanRegistered=true  → full dashboard (profile/events/announcements)
-// - faceScanRegistered=false → QR pending page only
-// Admin and SG routes are completely unaffected.
-router.beforeEach((to, from, next) => {
-    // Only apply to student routes with our meta flags
-    if (!to.meta.requiresFaceScan && !to.meta.pendingOnly) {
-        return next();
-    }
-
-    // Check face scan status from stored user or mock DB
-    const currentUser = getCurrentUser();
-    let isFaceScanRegistered = false;
-
-    if (currentUser) {
-        // Check mock DB for latest status (stays in sync if updated)
-        const dbUser = mockDb.users.find(u => u.id === currentUser.id);
-        isFaceScanRegistered = dbUser ? dbUser.faceScanRegistered : false;
-    }
-
-    if (to.meta.requiresFaceScan && !isFaceScanRegistered) {
-        // Not registered → redirect to QR pending page
-        return next({ name: 'student-pending' });
-    }
-
-    if (to.meta.pendingOnly && isFaceScanRegistered) {
-        // Already registered → redirect to profile (skip pending)
-        return next({ name: 'student-profile' });
-    }
-
-    next();
-});
 
 export default router

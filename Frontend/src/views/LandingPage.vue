@@ -1,6 +1,6 @@
 <script setup>
-import Background from '../components/Background.vue';
 import Logos from '../components/Logos.vue';
+import ColorBends from '../components/ColorBends.vue';
 import WelcomeSlide from '../components/slides/WelcomeSlide.vue';
 import TermsSlide from '../components/slides/TermsSlide.vue';
 import LoginSlide from '../components/slides/LoginSlide.vue';
@@ -54,7 +54,22 @@ onUnmounted(() => {
 
 <template>
   <div class="relative w-full h-[100dvh] bg-black text-white overflow-hidden flex justify-center">
-    <Background />
+    <!-- Background Wrapper -->
+    <div class="absolute inset-0 w-full h-full z-0 pointer-events-none">
+      <ColorBends 
+        :colors="['#02046e']" 
+        :rotation="0" 
+        :speed="0.2" 
+        :scale="1" 
+        :frequency="1" 
+        :warpStrength="1" 
+        :mouseInfluence="1" 
+        :parallax="0.5" 
+        :noise="0.1" 
+        :transparent="true" 
+        :autoRotate="0" 
+      />
+    </div>
     
     <div class="app-container relative w-full max-w-[480px] h-[100dvh] flex flex-col z-10 overflow-hidden" v-show="!showDevPage">
       
